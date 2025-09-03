@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
 app = FastAPI()
 origins = [
@@ -18,3 +19,10 @@ app.add_middleware(
 @app.get("/healthz")
 def healthz():
     return {"status": "ok"}
+
+class Message(BaseModel):
+    text: str
+
+@app.post("/echo")
+def echo(message: Message):
+    return {"received": message.text, "reply":"ダミー応答です"}
